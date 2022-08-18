@@ -77,10 +77,10 @@ jobs:
         run: chmod +x ci/build-docker-frontend.sh && ci/build-docker-frontend.sh
       
       - name: push-docker-frontend
-        run: chmod +x ci/push-docker.sh && ci/push-docker.sh
+        run: chmod +x ci/push-docker-frontend.sh && ci/push-docker-frontend.sh
 
       - name: push-docker-backend
-        run: chmod +x ci/push-docker.sh && ci/push-docker.sh        
+        run: chmod +x ci/push-docker-backend.sh && ci/push-docker-backend.sh        
 
 
     
