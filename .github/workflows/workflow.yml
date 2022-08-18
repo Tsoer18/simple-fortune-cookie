@@ -17,7 +17,22 @@ jobs:
         with:
           name: code
           path: .
-  build:
+
+  Build backend:
+    runs-on: ubuntu-latest
+    needs: cloneDown
+    steps:
+      - name: Download-repo
+        uses: actions/download-artifact@v2
+        with:
+          name: code
+          path: .
+
+      - name: backend-run
+        working-directory: ./backend
+        run: go run backend
+
+  Build frontend:
     runs-on: ubuntu-latest
     needs: cloneDown
     steps:
@@ -30,10 +45,6 @@ jobs:
       - name: frontend-run
         working-directory: ./frontend
         run: go run frontend
-
-      - name: backend-run
-        working-directory: ./backend
-        run: go run backend
 
   test:
     runs-on: ubuntu-latest
@@ -49,7 +60,7 @@ jobs:
         working-directory: ./frontend
         run: go test
 
-  dockerHubPush:
+  Docker backend :
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -58,18 +69,19 @@ jobs:
         with:
           name: code
           path: .
-      - name: build-docker-frontend
-        working-directory: ./frontend
-        run: chmod +x ci/build-docker.sh && ci/build-docker.sh
+
       - name: build-docker-backend
         working-directory: ./backend
-        run: chmod +x ci/build-docker.sh && ci/build-docker.sh
+        run: chmod +x ci/build-docker-backend.sh && ci/build-docker-backend.sh
+
+      - name: build-docker-frontend
+        working-directory: ./frontend
+        run: chmod +x ci/build-docker-frontend.sh && ci/build-docker-frontend.sh
       
       - name: push-docker-frontend
-        working-directory: ./frontend
         run: chmod +x ci/push-docker.sh && ci/push-docker.sh
+
       - name: push-docker-backend
-        working-directory: ./backend
         run: chmod +x ci/push-docker.sh && ci/push-docker.sh        
 
 
