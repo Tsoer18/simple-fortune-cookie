@@ -1,0 +1,14 @@
+name: Project CI
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone-down
+        uses: actions/checkout@v2
+        with:
+          name: code
+          path: .
+
+      - run: go test 
+
