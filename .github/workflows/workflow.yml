@@ -71,11 +71,9 @@ jobs:
           path: .
 
       - name: build-docker-backend
-        working-directory: ./backend
         run: chmod +x ci/build-docker-backend.sh && ci/build-docker-backend.sh
 
       - name: build-docker-frontend
-        working-directory: ./frontend
         run: chmod +x ci/build-docker-frontend.sh && ci/build-docker-frontend.sh
       
       - name: push-docker-frontend
