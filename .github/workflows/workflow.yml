@@ -7,7 +7,7 @@ env:
 
 jobs:
   cloneDown:
-    runs-on: [self-hosted]
+    runs-on: ubuntu-latest
     steps:
       - name: Clone-down
         uses: actions/checkout@v2
@@ -18,7 +18,7 @@ jobs:
           name: code
           path: .
   build:
-    runs-on: [self-hosted]
+    runs-on: ubuntu-latest
     needs: cloneDown
     steps:
       - name: Download-repo
@@ -36,7 +36,7 @@ jobs:
         run: go run backend
 
   test:
-    runs-on: [self-hosted]
+    runs-on: ubuntu-latest
     needs: cloneDown
     steps:
       - name: Download-repo
@@ -50,7 +50,7 @@ jobs:
         run: go test
 
   dockerHubPush:
-    runs-on: [self-hosted]
+    runs-on: ubuntu-latest
     needs: test
     steps:
       - name: Download-repo
