@@ -1,11 +1,46 @@
 name: Project CI
 on: push
+env:
+  docker_username: ${{ secrets.DOCKER_USERNAME }}
+  docker_password: ${{ secrets.DOCKER_PASSWORD }}
+  GIT_COMMIT: ${{ github.sha }}
+
 jobs:
-  test:
+  cloneDown:
     runs-on: [self-hosted]
     steps:
       - name: Clone-down
         uses: actions/checkout@v2
+
+      - name: Upload-repo
+        uses: actions/upload-artifact@v2
+        with:
+          name: code
+          path: .
+  build:
+    runs-on: [self-hosted]
+    needs: cloneDown
+    steps:
+      - name: Download-repo
+        uses: actions/download-artifact@v2
+        with:
+          name: code
+          path: .
+
+      - name: frontend-run
+        working-directory: ./frontend
+        run: go run frontend
+
+      - name: backend-run
+        working-directory: ./backend
+        run: go run backend
+
+  test:
+    runs-on: [self-hosted]
+    needs: cloneDown
+    steps:
+      - name: Download-repo
+        uses: actions/download-artifact@v2
         with:
           name: code
           path: .
@@ -14,4 +49,28 @@ jobs:
         working-directory: ./frontend
         run: go test
 
+  dockerHubPush:
+    runs-on: [self-hosted]
+    needs: test
+    steps:
+      - name: Download-repo
+        uses: actions/download-artifact@v2
+        with:
+          name: code
+          path: .
+      - name: build-docker-frontend
+        working-directory: ./frontend
+        run: chmod +x ci/build-docker.sh && ci/build-docker.sh
+      - name: build-docker-backend
+        working-directory: ./backend
+        run: chmod +x ci/build-docker.sh && ci/build-docker.sh
+      
+      - name: push-docker-frontend
+        working-directory: ./frontend
+        run: chmod +x ci/push-docker.sh && ci/push-docker.sh
+      - name: push-docker-backend
+        working-directory: ./backend
+        run: chmod +x ci/push-docker.sh && ci/push-docker.sh        
 
+
+    
