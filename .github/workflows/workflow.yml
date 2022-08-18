@@ -10,5 +10,5 @@ jobs:
           name: code
           path: .
 
-      - run: go test 
+      - run: cd frontend && go test 
 
