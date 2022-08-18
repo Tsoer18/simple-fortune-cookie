@@ -10,6 +10,8 @@ jobs:
           name: code
           path: .
 
-      - run: cd frontend && go test && cd ..
+      - name: test
+        working-directory: ./frontend
+        run: go test
 
 
