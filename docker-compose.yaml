@@ -2,8 +2,8 @@ version: '3'
 services:
   frontend:
     container_name: frontend
-    build: ./frontend
+    image: tsoer18/frontend-app:latest
 
   backend:
     container_name: backend
-    build: ./backend
+    image: tsoer18/backend-app:latest
