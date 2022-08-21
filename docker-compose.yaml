@@ -1,9 +1,13 @@
-version: '3'
+version: '3.1'
+
 services:
+
   frontend:
-    container_name: frontend
     image: tsoer18/frontend-app:latest
+    ports:
+      - 8080:80
+    depends_on:
+      - backend
 
   backend:
-    container_name: backend
     image: tsoer18/backend-app:latest

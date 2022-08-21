@@ -6,7 +6,7 @@ env:
   GIT_COMMIT: ${{ github.sha }}
 
 jobs:
-  cloneDown:
+  Clone-down:
     runs-on: ubuntu-latest
     steps:
       - name: Clone-down
@@ -18,9 +18,9 @@ jobs:
           name: code
           path: .
 
-  Build-backend:
+  Build:
     runs-on: ubuntu-latest
-    needs: cloneDown
+    needs: Clone-down
     steps:
       - name: Download-repo
         uses: actions/download-artifact@v2
@@ -28,27 +28,17 @@ jobs:
           name: code
           path: .
 
-      - name: backend-run
+      - name: backend-build
         working-directory: ./backend
-        run: go run backend
+        run: go build backend
 
-  Build-frontend:
-    runs-on: ubuntu-latest
-    needs: cloneDown
-    steps:
-      - name: Download-repo
-        uses: actions/download-artifact@v2
-        with:
-          name: code
-          path: .
-
-      - name: frontend-run
+      - name: frontend-build
         working-directory: ./frontend
-        run: go run frontend
+        run: go build frontend
 
-  test:
+  Test:
     runs-on: ubuntu-latest
-    needs: cloneDown
+    needs: [Clone-down, Build]
     steps:
       - name: Download-repo
         uses: actions/download-artifact@v2
@@ -60,9 +50,9 @@ jobs:
         working-directory: ./frontend
         run: go test
 
-  Docker-backend :
+  Docker-backend:
     runs-on: ubuntu-latest
-    needs: test
+    needs: Test
     steps:
       - name: Download-repo
         uses: actions/download-artifact@v2
